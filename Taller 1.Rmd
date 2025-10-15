@@ -118,6 +118,7 @@ ggsave("grafico_C.png", plot = final_plot, width = 8, height = 6)
 
 ``` 
     b. En cada base, calcular el vector de medias, la matriz de covarianza y la matriz de correlación.
+``` 
 [1] "===== Archivo: df_a.csv ====="
 [1] "----- Vector de Medias -----"
         x         y 
