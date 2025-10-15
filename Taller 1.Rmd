@@ -67,21 +67,21 @@ $$\begin{array}{cc} x & y \\
     
 ```{r}
 scatGG=function(Base,x.Ch,y.Ch){
-  GG=_____ %>% 
-    ggplot(aes(x=get(______),y=get(____)))+
+  GG=Base %>% 
+    ggplot(aes(x=get(x),y=get(y)))+
     geom_point(alpha=0.5)
   return(GG)
 }
 
 textGG=function(GG,tL,xL,yL,tS,aTS,atS){
   GG=GG+
-    labs(title = ______)+
-    xlab(___)+
-    ylab(____)+
+    labs(title = tL)+
+    xlab(xL)+
+    ylab(yL)+
     theme_bw()+
-    theme(title = element_text(size=_____,face = "bold"),
-          axis.title = element_text(size=____,face = "plain"),
-          axis.text = element_text(size=___),
+    theme(title = element_text(size=tS,face = "bold"),
+          axis.title = element_text(size=aTS,face = "plain"),
+          axis.text = element_text(size=atS),
           plot.title = element_text(hjust=0.5))
   return(GG)
 }
