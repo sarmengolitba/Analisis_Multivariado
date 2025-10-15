@@ -63,51 +63,170 @@ $$\begin{array}{cc} x & y \\
 
 5. Considerar las bases `df_a.csv`, `df_b.csv` y `df_c.csv`
 
-    a. Completar el siguiente código para hacer un scatterplot de ambas variables en cada base.
+    a. Completar el siguiente código para hacer un scatterplot de ambas variables en cada base. LO HICE PARA TODAS LAS BASES, SOLO HAY QUE CAMBIAR EL NOMBRE DEL ARCHIVO CSV!!
     
 ```{r}
-scatGG=function(Base,x.Ch,y.Ch){
-  GG=Base %>% 
-    ggplot(aes(x=get(x),y=get(y)))+
-    geom_point(alpha=0.5)
+require(ggplot2)
+require(dplyr)
+require(stringr)
+
+
+scatGG <- function(Base, x.Ch, y.Ch) {
+  GG <- Base %>% 
+    ggplot(aes(x = get(x.Ch), y = get(y.Ch))) +
+    geom_point(alpha = 0.5)
   return(GG)
 }
 
-textGG=function(GG,tL,xL,yL,tS,aTS,atS){
-  GG=GG+
-    labs(title = tL)+
-    xlab(xL)+
-    ylab(yL)+
-    theme_bw()+
-    theme(title = element_text(size=tS,face = "bold"),
-          axis.title = element_text(size=aTS,face = "plain"),
-          axis.text = element_text(size=atS),
-          plot.title = element_text(hjust=0.5))
+
+textGG <- function(GG, tL, xL, yL, tS, aTS, atS) {
+  GG <- GG +
+    labs(title = tL) +
+    xlab(xL) +
+    ylab(yL) +
+    theme_bw() +
+    theme(
+      title = element_text(size = tS, face = "bold"),
+      axis.title = element_text(size = aTS, face = "plain"),
+      axis.text = element_text(size = atS),
+      plot.title = element_text(hjust = 0.5)
+    )
   return(GG)
 }
-```
-    
 
+
+df <- read.csv("df_c.csv")
+
+
+base_plot <- scatGG(Base = df, x.Ch = "x", y.Ch = "y")
+
+
+final_plot <- textGG(
+  GG = base_plot,
+  tL = "x vs. y",
+  xL = "x",
+  yL = "y",
+  tS = 16,  
+  aTS = 12, 
+  atS = 10  
+)
+
+print(final_plot)
+print(final_plot)
+
+ggsave("grafico_C.png", plot = final_plot, width = 8, height = 6)
+
+``` 
     b. En cada base, calcular el vector de medias, la matriz de covarianza y la matriz de correlación.
+[1] "===== Archivo: df_a.csv ====="
+[1] "----- Vector de Medias -----"
+        x         y 
+ 999.6887 1500.0171 
+[1] "----- Matriz de Covarianza -----"
+          x         y
+x  36.63320 -19.44566
+y -19.44566  15.81432
+[1] "----- Matriz de Correlación -----"
+           x          y
+x  1.0000000 -0.8079042
+y -0.8079042  1.0000000
+[1] "===== Archivo: df_b.csv ====="
+[1] "----- Vector de Medias -----"
+       x        y 
+1000.067 1500.272 
+[1] "----- Matriz de Covarianza -----"
+         x        y
+x 1252.245 1193.867
+y 1193.867 1209.422
+[1] "----- Matriz de Correlación -----"
+          x         y
+x 1.0000000 0.9701132
+y 0.9701132 1.0000000
+[1] "===== Archivo: df_c.csv ====="
+[1] "----- Vector de Medias -----"
+       x        y 
+1000.451 1500.073 
+[1] "----- Matriz de Covarianza -----"
+          x         y
+x 109.75367  70.93078
+y  70.93078 151.00361
+[1] "----- Matriz de Correlación -----"
+          x         y
+x 1.0000000 0.5509746
+y 0.5509746 1.0000000
 
     c. Completar el siguiente código para hacer gráficos de densidad conjunta de ambas variables, 
     utilizando contornos y heatmaps.
 ```{r}
-dCont2DGG=function(Base,x.Ch,y.Ch){
-  GG=_____ %>% 
-      ggplot(aes(x=get(____),y=get(____)))+
-      stat_density_2d(aes(color = ..level..)) +
-      scale_color_viridis_c()
+library(dplyr)
+library(ggplot2)
+
+
+textGG <- function(GG, tL, xL, yL, tS, aTS, atS) {
+  GG <- GG +
+    labs(title = tL) +
+    xlab(xL) +
+    ylab(yL) +
+    theme_bw() +
+    theme(
+      plot.title = element_text(size = tS, face = "bold", hjust = 0.5),
+      axis.title = element_text(size = aTS, face = "plain"),
+      axis.text = element_text(size = atS)
+    )
   return(GG)
 }
 
-dFill2DGG=function(Base,x.Ch,y.Ch){
-    GG=Base %>% 
-      ggplot(aes(x=get(_____),y=get(_____)))+
-      stat_density_2d(aes(fill = ..density..), geom = "raster", contour = FALSE) +
-      scale_fill_viridis_c()
+dCont2DGG <- function(Base, x.Ch, y.Ch) {
+  GG <- Base %>% 
+    ggplot(aes(x = get(x.Ch), y = get(y.Ch))) +
+    stat_density_2d(aes(color = ..level..)) +
+    scale_color_viridis_c()
   return(GG)
 }
+
+
+dFill2DGG <- function(Base, x.Ch, y.Ch) {
+  GG <- Base %>% 
+    ggplot(aes(x = get(x.Ch), y = get(y.Ch))) +
+    stat_density_2d(aes(fill = ..density..), geom = "raster", contour = FALSE) +
+    scale_fill_viridis_c()
+  return(GG)
+}
+
+
+df <- read.csv("df_a.csv")
+
+
+plot_contorno <- dCont2DGG(Base = df, x.Ch = "x", y.Ch = "y")
+
+
+plot_contorno_final <- textGG(
+  GG = plot_contorno,
+  tL = "Gráfico de Contornos de Densidad",
+  xL = "Variable X",
+  yL = "Variable Y",
+  tS = 16, aTS = 12, atS = 10
+)
+
+
+ggsave("grafico_contornos.png", plot = plot_contorno_final)
+print(plot_contorno_final)
+
+
+
+plot_heatmap <- dFill2DGG(Base = df, x.Ch = "x", y.Ch = "y")
+
+
+plot_heatmap_final <- textGG(
+  GG = plot_heatmap,
+  tL = "Heatmap de Densidad",
+  xL = "Variable X",
+  yL = "Variable Y",
+  tS = 16, aTS = 12, atS = 10
+)
+
+ggsave("grafico_heatmap.png", plot = plot_heatmap_final)
+print(plot_heatmap_final)
 ```
     
     
@@ -115,28 +234,87 @@ dFill2DGG=function(Base,x.Ch,y.Ch){
     d. Completar el siguiente código para hacer histogramas y qq-plots de cada variable, identificar cuáles de las variables tienen distribución parecida a una normal.
   
 ```{r}
-GG_qqNorm=function(Base,y.Ch){
-  my=mean(Base[,_____])
-  sy=sd(_____[,____])
-  GG=Base %>% 
-    ggplot(aes(sample=get(y.Ch)))+
-    stat_qq(distribution = qnorm,dparams = list(mean=____,sd=____))+
-    stat_qq_line(distribution = qnorm,dparams = list(mean=____,sd=___),linetype="dashed",color="red")
+
+GG_qqNorm <- function(Base, y.Ch) {
+  
+  my <- mean(Base[, y.Ch], na.rm = TRUE)
+  sy <- sd(Base[, y.Ch], na.rm = TRUE)
+  
+  GG <- Base %>%
+    ggplot(aes(sample = get(y.Ch))) +
+    
+    stat_qq(distribution = qnorm, dparams = list(mean = my, sd = sy)) +
+    
+    stat_qq_line(distribution = qnorm, dparams = list(mean = my, sd = sy), linetype = "dashed", color = "red")
   return(GG)
 }
 
-histGG_Norm=function(Base,x.Ch){
-  mx=mean(____[,_____])
-  sx=_____(Base[,x.Ch])
-  xs=seq(mx-2.5*sx,mx+2.5*sx,length.out=500)
-  ds=dnorm(xs,mx,sx)
-  df_d=data.frame(x=xs,d=ds)
-  GG=Base %>% 
-    ggplot(aes(x=get(_____)))+
-    geom_histogram(mapping=aes(y=..density..),color="blue",fill="white")+
-    geom_line(data = _____,mapping = aes(x=x,y=d),color="red")
+
+histGG_Norm <- function(Base, x.Ch) {
+  
+  mx <- mean(Base[, x.Ch], na.rm = TRUE)
+  sx <- sd(Base[, x.Ch], na.rm = TRUE)
+  
+  
+  xs <- seq(mx - 3 * sx, mx + 3 * sx, length.out = 500)
+  ds <- dnorm(xs, mx, sx)
+  df_d <- data.frame(x = xs, d = ds)
+  
+  GG <- Base %>%
+    ggplot(aes(x = get(x.Ch))) +
+    
+    geom_histogram(mapping = aes(y = after_stat(density)), color = "blue", fill = "white", bins = 20) +
+    
+    geom_line(data = df_d, mapping = aes(x = x, y = d), color = "red")
   return(GG)
 }
+
+
+library(ggplot2)
+library(dplyr)
+mis_datos <- read.csv("df_c.csv")
+
+
+histo_x <- histGG_Norm(Base = mis_datos, x.Ch = "x")
+print(histo_x)
+
+qq_x <- GG_qqNorm(Base = mis_datos, y.Ch = "x")
+print(qq_x)
+
+
+histo_y <- histGG_Norm(Base = mis_datos, x.Ch = "y")
+print(histo_y)
+
+qq_y <- GG_qqNorm(Base = mis_datos, y.Ch = "y")
+print(qq_y)
+
+
+histo_x <- histGG_Norm(Base = mis_datos, x.Ch = "x")
+
+
+ggsave("histograma_de_x.png", plot = histo_x, width = 7, height = 5)
+
+
+qq_x <- GG_qqNorm(Base = mis_datos, y.Ch = "x")
+
+
+ggsave("qq_plot_de_x.png", plot = qq_x, width = 6, height = 6)
+
+
+histo_y <- histGG_Norm(Base = mis_datos, x.Ch = "y")
+
+
+ggsave("histograma_de_y.png", plot = histo_y, width = 7, height = 5)
+
+
+qq_y <- GG_qqNorm(Base = mis_datos, y.Ch = "y")
+
+
+ggsave("qq_plot_de_y.png", plot = qq_y, width = 6, height = 6)
+
 ```
-  
+
+LA BASE DE DATOS C PRESENTA AMBAS VARIABLES (X,Y) CON DISTRIBUCION SEMEJANTE A LA NORMAL!!
+
     e. ¿Cuál de las bases tiene una distribución de sus columnas que se asemeja a una normal multivariada?
+LA BASE C POSEE UNA DISTRIBUCION DE SUS COLUMNAS QUE SE ASEMEJA A UNA NORMAL MULTIVARIADA.
